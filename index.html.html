@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>86400 — Time is Currency</title>
+
+    <!-- 載入精緻的日系無襯線中文與古典襯線英文 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* 預設為日間暖米白色調，JavaScript 會根據時間動態更新這些變數 */
+            --bg-color: #f2f1ed;      
+            --text-main: #2b2b2b;     
+            --text-muted: #8c8c88;    
+            --text-light: #b0b0ac;    
+            --divider-color: #b0b0ac;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            background: var(--bg-color);
+            font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+            overflow: hidden;
+            padding: 20px;
+            /* 絲滑的色溫漸變切換效果 */
+            transition: background-color 1.5s cubic-bezier(0.4, 0, 0.2, 1), color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 頂部小標籤 */
+        .label {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 核心倒數數字 */
+        .main-number {
+            font-size: clamp(4rem, 12vw, 7.5rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 24px;
+            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            font-feature-settings: "tnum"; /* 等寬數字，防止時鐘跳動 */
+        }
+
+        /* 點綴的分隔細線 */
+        .divider {
+            width: 40px;
+            height: 1px;
+            background-color: var(--divider-color);
+            margin: 15px 0 25px 0;
+            transition: background-color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 貨幣概念區 */
+        .money {
+            text-align: center;
+            font-size: clamp(1rem, 3vw, 1.15rem);
+            line-height: 1.8;
+            font-weight: 300;
+            color: var(--text-muted);
+            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .money span {
+            font-weight: 500;
+            color: var(--text-main);
+            font-feature-settings: "tnum";
+            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 名言容器 */
+        .quote-box {
+            margin-top: 60px;
+            max-width: 600px;
+            text-align: center;
+            padding: 0 20px;
+            cursor: pointer; /* 點擊可以手動換籤詩，增加互動溫度 */
+            user-select: none;
+        }
+
+        /* 英文名言：古典優雅的襯線體 */
+        .quote-en {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 中文名言 */
+        .quote-zh {
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 作者標示 */
+        .author {
+            margin-top: 12px;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            color: var(--text-light);
+            text-transform: uppercase;
+            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 輕柔淡入淡出動畫 */
+        .fade {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="label">Today Remaining</div>
+<div id="seconds" class="main-number">86,400</div>
+
+<div class="divider"></div>
+
+<div id="money" class="money">
+    剩餘時間價值：<span>$</span><span id="remain">86,400</span><br>
+    今日已消耗額：<span>$</span><span id="used">0</span>
+</div>
+
+<div id="quoteBox" class="quote-box fade" onclick="changeQuote()">
+    <div id="quoteEn" class="quote-en"></div>
+    <div id="quoteZh" class="quote-zh"></div>
+    <div id="author" class="author"></div>
+</div>
+
+<script>
+
+// ===== ✅ 50句精心編譯的中英名言（排除禪宗，融入聖經智慧與歷史基督徒思想家） =====
+const quotes = [
+    {en:"Lost time is never found again.",zh:"光陰一去，過往難追。",author:"Benjamin Franklin"},
+    {en:"Your time is limited, don't waste it living someone else's life.",zh:"生命有限，莫為他人而活。",author:"Steve Jobs"},
+    {en:"Teach us to number our days, that we may gain a heart of wisdom.",zh:"求祢指教我們怎樣數算自己的日子，好叫我們得著智慧的心。",author:"Psalms 90:12"},
+    {en:"There is a time for everything, and a season for every activity under the heavens.",zh:"凡事都有定期，天下萬務都有定時。",author:"Ecclesiastes 3:1"},
+    {en:"The present is the point at which time touches eternity.",zh:"現在，是時間與永恆相接的交點。",author:"C.S. Lewis"},
+    {en:"The future starts today, not tomorrow.",zh:"未來始於今日，而非明日。",author:"Pope John Paul II"},
+    {en:"Better three hours too soon than a minute too late.",zh:"早到三小時，勝過遲到一分鐘。",author:"William Shakespeare"},
+    {en:"Time is the most valuable thing a man can spend.",zh:"時間是人所能揮霍之物中，最無價的珍寶。",author:"Theophrastus"},
+    {en:"You may delay, but time will not.",zh:"人可蹉跎，歲月不待。",author:"Benjamin Franklin"},
+    {en:"Time flies over us, but leaves its shadow behind.",zh:"時光在頭頂飛逝，卻將影子留在我們心底。",author:"Nathaniel Hawthorne"},
+    {en:"The bad news is time flies. The good news is you're the pilot.",zh:"壞消息是時光飛逝，好消息是，你是自己的掌舵者。",author:"Michael Altshuler"},
+    {en:"Do not squander time, for that is the stuff life is made of.",zh:"莫浪費光陰，因為生命正是由時間編織而成。",author:"Benjamin Franklin"},
+    {en:"Making the most of every opportunity, because the days are evil.",zh:"要愛惜光陰，因為現今的世代邪惡。",author:"Ephesians 5:16"},
+    {en:"Time brings all things to pass.",zh:"萬物皆在光陰的流轉中，終成定局。",author:"Aeschylus"},
+    {en:"To do two things at once is to do neither.",zh:"心分兩路者，終將無路可行。",author:"Publilius Syrus"},
+    {en:"A man who dares to waste one hour has not discovered the value of life.",zh:"敢於荒廢一小時的人，尚未體悟生命的尊貴。",author:"Charles Darwin"},
+    {en:"Time is the wisest counselor.",zh:"歲月，是世間最睿智的導師。",author:"Pericles"},
+    {en:"He has made everything beautiful in its time.",zh:"神造萬物，各按其時成為美好。",author:"Ecclesiastes 3:11"},
+    {en:"The key is not spending time, but investing it.",zh:"關鍵不在於消耗時間，而在於投資生命。",author:"Stephen R. Covey"},
+    {en:"Time is the longest distance between two places.",zh:"時間，是兩地之間最遙遠的丈量。",author:"Tennessee Williams"},
+    {en:"Time is the coin of your life. It is the only coin you have.",zh:"時間是你生命唯一的貨幣，唯有你能決定如何花費。",author:"Carl Sandburg"},
+    {en:"Tempus edax rerum — Time, devourer of all things.",zh:"歲月無情，吞噬世間一切萬物。",author:"Ovid"},
+    {en:"Time is the fire in which we burn.",zh:"時間是火焰，我們在其間熊熊燃燒。",author:"Delmore Schwartz"},
+    {en:"All we have to decide is what to do with the time that is given us.",zh:"我們唯一需要抉擇的，是如何運用被賜予的時光。",author:"J.R.R. Tolkien"},
+    {en:"With the Lord a day is like a thousand years, and a thousand years are like a day.",zh:"主看一日如千年，千年如一日。",author:"2 Peter 3:8"},
+    {en:"My times are in your hands.",zh:"我終生的事，盡在祢的手中。",author:"Psalms 31:15"},
+    {en:"In their hearts humans plan their course, but the Lord establishes their steps.",zh:"人心籌算自己的道路，唯耶和華指引他的腳步。",author:"Proverbs 16:9"},
+    {en:"Time is the school of truth.",zh:"歲月，是洗滌並尋見真理的課堂。",author:"Francis Bacon"},
+    {en:"Time reveals the truth.",zh:"真理在時光的沉澱中，終將顯明。",author:"Erasmus"},
+    {en:"Time is swift, and flies away like a shadow.",zh:"時光飛逝，如影漂移不著痕跡。",author:"Virgil"},
+    {en:"Let us not become weary in doing good, for at the proper time we will reap a harvest.",zh:"行善不可喪志，若不灰心，到了時候就要收成。",author:"Galatians 6:9"},
+    {en:"Commit to the Lord whatever you do, and he will establish your plans.",zh:"你所做的要交託耶和華，你所謀的就必成立。",author:"Proverbs 16:3"},
+    {en:"Do not boast about tomorrow, for you do not know what a day may bring.",zh:"不要為明日自誇，因為一日要生何事，你尚且不能預知。",author:"Proverbs 27:1"},
+    {en:"Time is fleeting, and our hearts are beating funeral marches to the grave.",zh:"時光易逝，我們的心跳正一步步邁向終點。",author:"Henry Wadsworth Longfellow"},
+    {en:"Time teaches all things to him who lives.",zh:"歲月終將向活過的人，揭示萬物的真諦。",author:"Aeschylus"},
+    {en:"Time is the healer of all necessary evils.",zh:"時間是世間哀傷與遺憾的終極撫平者。",author:"Menander"},
+    {en:"What is your life? You are a mist that appears for a little while and then vanishes.",zh:"你們的生命是什麼呢？你們原來是一片雲霧，出現少時就不見了。",author:"James 4:14"},
+    {en:"Man is like a breath; his days are like a fleeting shadow.",zh:"人像一口氣息，他的年日如影飛逝。",author:"Psalms 144:4"},
+    {en:"Today is ours; let us live it with a faithful heart.",zh:"今日既蒙賜予，願我們以信實與感恩之心度過。",author:"Thomas Carlyle"},
+    {en:"Time is but the stream I go a-fishing in.",zh:"時間不過是我垂釣生命意義的溪流。",author:"Henry David Thoreau"},
+    {en:"The grass withers and the flowers fall, but the word of our God endures forever.",zh:"草必枯乾，花必凋殘，唯有我們神的話必永遠立定。",author:"Isaiah 40:8"},
+    {en:"Yesterday is history, tomorrow is a mystery, today is a gift.",zh:"昨日已成歷史，明日尚是奧祕，今日是神聖的禮物。",author:"Alice Morse Earle"},
+    {en:"Our life is what our thoughts make it.",zh:"生命的樣貌，取決於我們如何看待神所賜的每一天。",author:"Marcus Aurelius"},
+    {en:"The present of things past is memory; the present of things future is expectation.",zh:"過去之當下是回憶，現在之當下是凝視，未來之當下是期盼。",author:"Saint Augustine"},
+    {en:"Time is the raw material of everything.",zh:"時間是編織一切靈魂價值的最原始材料。",author:"Arnold Bennett"},
+    {en:"Be very careful, then, how you live—not as unwise but as wise.",zh:"你們要謹慎行事，不要像愚昧人，當像智慧人。",author:"Ephesians 5:15"},
+    {en:"To everything there is a season, and a time to every purpose under heaven.",zh:"天下萬務都有定時，萬事都有其定規。",author:"Ecclesiastes 3:1"},
+    {en:"The future is something which everyone reaches at sixty minutes an hour.",zh:"未來，是每個人以每小時六十分鐘的速度抵達的終點。",author:"C.S. Lewis"},
+    {en:"Let your eyes look straight ahead; fix your gaze directly before you.",zh:"你的雙眼當向前直看，堅定神為你預備的每一步。",author:"Proverbs 4:25"},
+    {en:"Faith is taking the first step even when you don't see the whole staircase.",zh:"信心是即便看不清整段階梯，依然邁出神引領的第一步。",author:"Martin Luther King Jr."}
+];
+
+let lastIndex = -1;
+let quoteTimer;
+
+// 取得 DOM 節點
+const secEl = document.getElementById("seconds");
+const remainEl = document.getElementById("remain");
+const usedEl = document.getElementById("used");
+const quoteBox = document.getElementById("quoteBox");
+const quoteEn = document.getElementById("quoteEn");
+const quoteZh = document.getElementById("quoteZh");
+const authorEl = document.getElementById("author");
+
+// ===== ✅ 提案二：日軌色溫機制函數 =====
+function getColorPalette(hour) {
+    if (hour >= 5 && hour < 8) { // 清晨（晨霧藍灰）
+        return {
+            bg: "#eaebe6", 
+            textMain: "#2e302d",
+            textMuted: "#7a7d75",
+            textLight: "#a8aba3",
+            isNight: false
+        };
+    } else if (hour >= 8 && hour < 16) { // 白晝（經典日系暖米白）
+        return {
+            bg: "#f2f1ed", 
+            textMain: "#2b2b2b",
+            textMuted: "#8c8c88",
+            textLight: "#b0b0ac",
+            isNight: false
+        };
+    } else if (hour >= 16 && hour < 19) { // 黃昏（餘暉粉褐）
+        return {
+            bg: "#ebdcd0", 
+            textMain: "#3d322c",
+            textMuted: "#8f796d",
+            textLight: "#bfaaa0",
+            isNight: false
+        };
+    } else { // 深夜（靜謐深茶黑暗模式）
+        return {
+            bg: "#1e1f1c", 
+            textMain: "#e2e2dc",
+            textMuted: "#90908a",
+            textLight: "#4e4e4b",
+            isNight: true
+        };
+    }
+}
+
+// ===== ✅ 時間更新 + 溫和動態色溫 =====
+function updateTime() {
+    const now = new Date();
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+
+    let diff = Math.floor((end - now) / 1000);
+    diff = Math.max(0, diff);
+
+    let used = 86400 - diff;
+    used = Math.max(0, used);
+
+    // 1. 取得當前小時並更新背景與字體顏色變數
+    const hour = now.getHours();
+    const palette = getColorPalette(hour);
+    
+    document.documentElement.style.setProperty('--bg-color', palette.bg);
+    document.documentElement.style.setProperty('--text-main', palette.textMain);
+    document.documentElement.style.setProperty('--text-muted', palette.textMuted);
+    document.documentElement.style.setProperty('--text-light', palette.textLight);
+    document.documentElement.style.setProperty('--divider-color', palette.textLight);
+
+    // 2. 秒數色彩漸變（緊扣剩餘時間比率）
+    const ratio = diff / 86400;
+    let color;
+    
+    if (palette.isNight) {
+        // 深夜暗色模式下：高對比溫暖沙金色 -> 帶有警戒感的夕陽橙紅
+        const red = Math.floor(210 - (30 * ratio));
+        const green = Math.floor(140 + (40 * ratio));
+        const blue = Math.floor(100 + (40 * ratio));
+        color = `rgb(${red}, ${green}, ${blue})`;
+    } else {
+        // 白晝明色模式下：高雅青苔橄欖綠 -> 低飽和泥土紅褐色
+        const red = Math.floor(180 - (80 * ratio));
+        const green = Math.floor(95 + (45 * ratio));
+        const blue = Math.floor(80 + (30 * ratio));
+        color = `rgb(${red}, ${green}, ${blue})`;
+    }
+
+    secEl.innerText = diff.toLocaleString();
+    secEl.style.color = color;
+
+    remainEl.innerText = diff.toLocaleString();
+    usedEl.innerText = used.toLocaleString();
+}
+
+// ===== ✅ 名言切換（支援手動點擊換句與定時自動輪播） =====
+function changeQuote() {
+    // 重設輪播定時器，避免手動點擊後立刻觸發自動輪播的尷尬
+    clearInterval(quoteTimer);
+    quoteTimer = setInterval(changeQuote, 15000);
+
+    let index;
+    do {
+        index = Math.floor(Math.random() * quotes.length);
+    } while (index === lastIndex);
+
+    lastIndex = index;
+    const q = quotes[index];
+
+    // 先淡出
+    quoteBox.classList.remove("show");
+
+    // 0.4 秒後寫入新文字並淡入，使過渡極其平滑
+    setTimeout(() => {
+        quoteEn.innerText = q.en;
+        quoteZh.innerText = q.zh;
+        authorEl.innerText = "— " + q.author;
+        quoteBox.classList.add("show");
+    }, 400);
+}
+
+// 啟動定時器
+setInterval(updateTime, 1000);
+quoteTimer = setInterval(changeQuote, 15000);
+
+// 初始化執行
+updateTime();
+changeQuote();
+
+</script>
+
+</body>
+</html>
