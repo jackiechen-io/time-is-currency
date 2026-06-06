@@ -28,6 +28,7 @@
 
         body {
             height: 100vh;
+            height: 100dvh; /* 🌟 解決手機瀏覽器底欄遮擋的核心：改用動態視窗高度 */
             background: var(--bg-color);
             font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
@@ -234,12 +235,12 @@
 
         /* 底部控制面板 */
         .control-panel {
-            position: absolute;
-            bottom: 30px;
+            position: fixed; /* 🌟 改為 fixed 固定定位，確保緊貼手機可視畫面底部 */
+            bottom: calc(30px + env(safe-area-inset-bottom, 0px)); /* 🌟 自動避開 iOS 底部手勢小橫條 */
             right: 30px;
             display: flex;
             gap: 12px;
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 100;
         }
 
@@ -257,7 +258,7 @@
             cursor: pointer;
             overflow: hidden;
             white-space: nowrap;
-            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+            transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
                         border-color 0.4s, 
                         color 0.4s, 
                         box-shadow 0.4s;
@@ -266,12 +267,18 @@
             padding: 0;
         }
 
-        /* 滑鼠懸停展開 */
-        .glass-btn:hover {
-            width: 170px; /* 展開寬度以容納文字說明 */
-            color: var(--text-main);
-            border-color: var(--text-main);
-            box-shadow: 0 4px 12px var(--accent-glow);
+        /* 🌟 限制僅在支援滑鼠懸停的裝置上展開，防止手機觸控時卡在展開狀態 */
+        @media (hover: hover) {
+            .glass-btn:hover {
+                width: 170px; /* 展開寬度以容納文字說明 */
+                color: var(--text-main);
+                border-color: var(--text-main);
+                box-shadow: 0 4px 12px var(--accent-glow);
+            }
+            .glass-btn:hover .btn-text {
+                opacity: 1;
+                transition-delay: 0.12s;
+            }
         }
 
         /* 按鈕圖示部分 */
@@ -296,11 +303,6 @@
             font-weight: 500;
         }
 
-        .glass-btn:hover .btn-text {
-            opacity: 1;
-            transition-delay: 0.12s;
-        }
-
         /* 播放中的小呼吸燈 */
         .music-indicator {
             width: 6px;
@@ -322,10 +324,10 @@
 
         @media (max-width: 640px) {
             .control-panel {
-                bottom: 25px;
+                bottom: calc(25px + env(safe-area-inset-bottom, 0px)); /* 🌟 手機版同樣完美避開底部操作列 */
                 right: 50%;
                 transform: translateX(50%);
-                width: 90%;
+                width: auto; /* 🌟 避免寬度被強行拉大，保持圓鈕優美排列 */
                 justify-content: center;
             }
         }
