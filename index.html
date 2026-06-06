@@ -16,6 +16,8 @@
             --text-muted: #8c8c88;    
             --text-light: #b0b0ac;    
             --divider-color: #b0b0ac;
+            --accent-glow: rgba(140, 140, 136, 0.15);
+            --aura-color: rgba(176, 176, 172, 0.45);
         }
 
         * {
@@ -35,8 +37,9 @@
             color: var(--text-main);
             overflow: hidden;
             padding: 20px;
-            /* 絲滑的色溫漸變切換效果 */
-            transition: background-color 1.5s cubic-bezier(0.4, 0, 0.2, 1), color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            /* 將色溫切換時間拉長至超唯美的 3 秒，帶來夢幻的日光過渡 */
+            transition: background-color 3s cubic-bezier(0.16, 1, 0.3, 1), color 3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
         }
 
         /* 頂部小標籤 */
@@ -47,7 +50,10 @@
             color: var(--text-muted);
             margin-bottom: 12px;
             text-transform: uppercase;
-            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+            transition: color 3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 2.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 2.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* 核心倒數數字 */
@@ -57,7 +63,10 @@
             letter-spacing: -0.02em;
             line-height: 1;
             margin-bottom: 24px;
-            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+            transition: color 3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 2.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 2.8s cubic-bezier(0.16, 1, 0.3, 1);
             font-feature-settings: "tnum"; /* 等寬數字，防止時鐘跳動 */
         }
 
@@ -67,7 +76,10 @@
             height: 1px;
             background-color: var(--divider-color);
             margin: 15px 0 25px 0;
-            transition: background-color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+            transition: background-color 3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 2.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 2.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* 貨幣概念區 */
@@ -77,14 +89,17 @@
             line-height: 1.8;
             font-weight: 300;
             color: var(--text-muted);
-            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+            transition: color 3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 2.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 2.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .money span {
             font-weight: 500;
             color: var(--text-main);
             font-feature-settings: "tnum";
-            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: color 3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* 名言容器 */
@@ -95,54 +110,232 @@
             padding: 0 20px;
             cursor: pointer; /* 點擊可以手動換籤詩，增加互動溫度 */
             user-select: none;
+            position: relative;
+            z-index: 10;
+            will-change: transform;
+            /* 採用最流暢、最慢速的 out-expo 貝茲曲線，確保大卡片位移絲般滑順且毫無震動感 */
+            transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 英文名言：古典優雅的襯線體 */
+        /* 英文名言：古典優雅的襯線體，適度放大提升Legibility與大器感 */
         .quote-en {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            font-size: clamp(1.25rem, 3.2vw, 1.65rem);
             font-style: italic;
-            line-height: 1.5;
+            line-height: 1.55;
             margin-bottom: 12px;
             color: var(--text-main);
-            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+            transition: color 3s cubic-bezier(0.16, 1, 0.3, 1), transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center;
         }
 
         /* 中文名言 */
         .quote-zh {
-            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            font-size: clamp(1rem, 2.4vw, 1.25rem);
             font-weight: 300;
-            line-height: 1.6;
+            line-height: 1.65;
             color: var(--text-muted);
             letter-spacing: 0.05em;
-            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+            transition: color 3s cubic-bezier(0.16, 1, 0.3, 1), transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center;
         }
 
         /* 作者標示 */
         .author {
             margin-top: 12px;
-            font-size: 11px;
+            font-size: clamp(11px, 1.5vw, 13px);
             letter-spacing: 0.15em;
             color: var(--text-light);
             text-transform: uppercase;
-            transition: color 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+            transition: color 3s cubic-bezier(0.16, 1, 0.3, 1), transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: center;
         }
 
         /* 輕柔淡入淡出動畫 */
         .fade {
             opacity: 0;
             transform: translateY(8px);
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .show {
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* 呼吸光暈 (Sabbath Mode Breathing Aura) */
+        .breathing-aura {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: min(520px, 85vw);
+            height: min(520px, 85vw);
+            border-radius: 50%;
+            /* 採用 LFO 式極致柔和的羽化光暈 */
+            background: radial-gradient(circle, var(--aura-color) 0%, transparent 70%);
+            /* 🌟 核心進化：新增一圈極微細的精緻邊界。在 blur 濾鏡下，這條線會化為一圈朦朧神聖的圓環軌跡，在白天提供最完美的呼吸視角依循 */
+            border: 1.5px solid var(--text-muted);
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 3s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: blur(24px); /* 🌟 提高模糊半徑，使光暈與圓環更加朦朧自然，消除突兀色彩界限 */
+            will-change: transform, opacity;
+        }
+
+        /* 安息默想激活時的版面重塑：徹底、無感地隱沒時間資訊 */
+        .sabbath-active .label,
+        .sabbath-active .main-number,
+        .sabbath-active .divider,
+        .sabbath-active .money {
+            opacity: 0 !important;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+
+        /* 🌟 核心優化：利用 Transform GPU 加速代替 font-size 修改，完美消除任何微小卡頓 */
+        .sabbath-active .quote-box {
+            transform: translateY(-110px); /* 緩慢漂移到視覺焦點 */
+        }
+
+        .sabbath-active .quote-en {
+            /* 縮放 1.25 倍以達到高雅的大字體效果 */
+            transform: scale(1.25);
+        }
+
+        .sabbath-active .quote-zh {
+            transform: scale(1.18);
+        }
+
+        .sabbath-active .author {
+            transform: scale(1.12);
+        }
+
+        .sabbath-active .breathing-aura {
+            opacity: 1; 
+            /* 🌟 科學諧振呼吸頻率：一拍 11 秒（吸氣 5.5 秒，呼氣 5.5 秒），完美與人體自律神經放鬆共振 */
+            animation: holy-breath 11s infinite ease-in-out;
+        }
+
+        @keyframes holy-breath {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(0.75); 
+                opacity: 0.12; /* 🌟 調低最低透度，實現無重力的舒緩呼吸感 */
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.12); 
+                opacity: 0.48; /* 🌟 限制最高強度，配合光環線條，既溫柔若隱若現，又具備完美的日間引導軌跡 */
+            }
+        }
+
+        /* 底部控制面板 */
+        .control-panel {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 12px;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+        }
+
+        /* 優雅微縮、自動收合展開的控制按鈕 */
+        .glass-btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 42px; /* 預設收合成完美圓形 Icon */
+            height: 42px;
+            border-radius: 21px;
+            background: transparent;
+            border: 1px solid var(--divider-color);
+            color: var(--text-muted);
+            cursor: pointer;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+                        border-color 0.4s, 
+                        color 0.4s, 
+                        box-shadow 0.4s;
+            user-select: none;
+            outline: none;
+            padding: 0;
+        }
+
+        /* 滑鼠懸停展開 */
+        .glass-btn:hover {
+            width: 170px; /* 展開寬度以容納文字說明 */
+            color: var(--text-main);
+            border-color: var(--text-main);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        /* 按鈕圖示部分 */
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        /* 按鈕文字部分 */
+        .btn-text {
+            font-size: 11.5px;
+            letter-spacing: 0.08em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            margin-left: 2px;
+            margin-right: 15px;
+            font-weight: 500;
+        }
+
+        .glass-btn:hover .btn-text {
+            opacity: 1;
+            transition-delay: 0.12s;
+        }
+
+        /* 播放中的小呼吸燈 */
+        .music-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--text-light);
+            transition: background-color 0.5s ease;
+        }
+
+        .playing .music-indicator {
+            background-color: #92a88a; /* 寧靜的恩典草綠 */
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.3; transform: scale(0.85); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        @media (max-width: 640px) {
+            .control-panel {
+                bottom: 25px;
+                right: 50%;
+                transform: translateX(50%);
+                width: 90%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+<!-- 呼吸微光光暈 (在背景默默呼吸) -->
+<div id="breathingAura" class="breathing-aura"></div>
 
 <div class="label">Today Remaining</div>
 <div id="seconds" class="main-number">86,400</div>
@@ -160,9 +353,23 @@
     <div id="author" class="author"></div>
 </div>
 
-<script>
+<div class="control-panel" id="controlPanel">
+    <!-- 安息默想按鈕 -->
+    <button id="sabbathBtn" class="glass-btn" onclick="toggleSabbathMode()">
+        <span class="btn-icon">✦</span>
+        <span id="sabbathText" class="btn-text">進入安息默想</span>
+    </button>
+    <!-- 靜謐音樂開關 -->
+    <button id="musicBtn" class="glass-btn" onclick="toggleMusic()">
+        <span class="btn-icon">
+            <span class="music-indicator"></span>
+        </span>
+        <span id="musicText" class="btn-text">啟動靜謐琴聲</span>
+    </button>
+</div>
 
-// ===== ✅ 50句精心編譯的中英名言（排除禪宗，融入聖經智慧與歷史基督徒思想家） =====
+<script>
+// ===== ✅ 精選50句聖經智慧與歷史基督徒思想家名言 =====
 const quotes = [
     {en:"Lost time is never found again.",zh:"光陰一去，過往難追。",author:"Benjamin Franklin"},
     {en:"Your time is limited, don't waste it living someone else's life.",zh:"生命有限，莫為他人而活。",author:"Steve Jobs"},
@@ -218,6 +425,7 @@ const quotes = [
 
 let lastIndex = -1;
 let quoteTimer;
+let isSabbathMode = false;
 
 // 取得 DOM 節點
 const secEl = document.getElementById("seconds");
@@ -230,12 +438,14 @@ const authorEl = document.getElementById("author");
 
 // ===== ✅ 提案二：日軌色溫機制函數 =====
 function getColorPalette(hour) {
-    if (hour >= 5 && hour < 8) { // 清晨（晨霧藍灰）
+    if (hour >= 5 && hour < 8) { // 清晨（朝靄灰藍）
         return {
             bg: "#eaebe6", 
             textMain: "#2e302d",
             textMuted: "#7a7d75",
             textLight: "#a8aba3",
+            accentGlow: "rgba(122, 125, 117, 0.15)",
+            auraColor: "rgba(110, 115, 100, 0.22)", // 🌟 大幅調降飽和透度，呈現無負擔的溫柔晨光
             isNight: false
         };
     } else if (hour >= 8 && hour < 16) { // 白晝（經典日系暖米白）
@@ -244,6 +454,8 @@ function getColorPalette(hour) {
             textMain: "#2b2b2b",
             textMuted: "#8c8c88",
             textLight: "#b0b0ac",
+            accentGlow: "rgba(140, 140, 136, 0.15)",
+            auraColor: "rgba(170, 155, 130, 0.25)",  // 🌟 白畫金沙琥珀微光，高對比卻如霧氣般安靜
             isNight: false
         };
     } else if (hour >= 16 && hour < 19) { // 黃昏（餘暉粉褐）
@@ -252,14 +464,18 @@ function getColorPalette(hour) {
             textMain: "#3d322c",
             textMuted: "#8f796d",
             textLight: "#bfaaa0",
+            accentGlow: "rgba(143, 121, 109, 0.15)",
+            auraColor: "rgba(160, 125, 105, 0.28)", // 🌟 溫和的晚霞粉褐光暈
             isNight: false
         };
-    } else { // 深夜（靜謐深茶黑暗模式）
+    } else { // 深夜（靜謐茶黑）
         return {
             bg: "#1e1f1c", 
             textMain: "#e2e2dc",
             textMuted: "#90908a",
             textLight: "#4e4e4b",
+            accentGlow: "rgba(144, 144, 138, 0.1)",
+            auraColor: "rgba(230, 215, 180, 0.14)", // 🌟 深夜溫柔暖金燭光，極致安神
             isNight: true
         };
     }
@@ -278,7 +494,6 @@ function updateTime() {
     let used = 86400 - diff;
     used = Math.max(0, used);
 
-    // 1. 取得當前小時並更新背景與字體顏色變數
     const hour = now.getHours();
     const palette = getColorPalette(hour);
     
@@ -287,19 +502,18 @@ function updateTime() {
     document.documentElement.style.setProperty('--text-muted', palette.textMuted);
     document.documentElement.style.setProperty('--text-light', palette.textLight);
     document.documentElement.style.setProperty('--divider-color', palette.textLight);
+    document.documentElement.style.setProperty('--accent-glow', palette.accentGlow);
+    document.documentElement.style.setProperty('--aura-color', palette.auraColor);
 
-    // 2. 秒數色彩漸變（緊扣剩餘時間比率）
     const ratio = diff / 86400;
     let color;
     
     if (palette.isNight) {
-        // 深夜暗色模式下：高對比溫暖沙金色 -> 帶有警戒感的夕陽橙紅
         const red = Math.floor(210 - (30 * ratio));
         const green = Math.floor(140 + (40 * ratio));
         const blue = Math.floor(100 + (40 * ratio));
         color = `rgb(${red}, ${green}, ${blue})`;
     } else {
-        // 白晝明色模式下：高雅青苔橄欖綠 -> 低飽和泥土紅褐色
         const red = Math.floor(180 - (80 * ratio));
         const green = Math.floor(95 + (45 * ratio));
         const blue = Math.floor(80 + (30 * ratio));
@@ -313,11 +527,13 @@ function updateTime() {
     usedEl.innerText = used.toLocaleString();
 }
 
-// ===== ✅ 名言切換（支援手動點擊換句與定時自動輪播） =====
+// ===== ✅ 名言切換 =====
 function changeQuote() {
-    // 重設輪播定時器，避免手動點擊後立刻觸發自動輪播的尷尬
     clearInterval(quoteTimer);
-    quoteTimer = setInterval(changeQuote, 15000);
+    
+    // 🌟 兩者停留時間各加 5 秒：平日 15s -> 20s (20000ms)，默想 25s -> 30s (30000ms)
+    const interval = isSabbathMode ? 30000 : 20000;
+    quoteTimer = setInterval(changeQuote, interval);
 
     let index;
     do {
@@ -327,10 +543,8 @@ function changeQuote() {
     lastIndex = index;
     const q = quotes[index];
 
-    // 先淡出
     quoteBox.classList.remove("show");
 
-    // 0.4 秒後寫入新文字並淡入，使過渡極其平滑
     setTimeout(() => {
         quoteEn.innerText = q.en;
         quoteZh.innerText = q.zh;
@@ -339,13 +553,370 @@ function changeQuote() {
     }, 400);
 }
 
-// 啟動定時器
+// ===== ✅ ✦ 安息默想模式切換 =====
+function toggleSabbathMode() {
+    const body = document.body;
+    const text = document.getElementById("sabbathText");
+
+    isSabbathMode = !isSabbathMode;
+
+    if (isSabbathMode) {
+        body.classList.add("sabbath-active");
+        text.innerText = "離開默想模式";
+    } else {
+        body.classList.remove("sabbath-active");
+        text.innerText = "進入安息默想";
+    }
+
+    // 當狀態改變時，立刻重新切換名言並以正確的慢速時間重設排程
+    changeQuote();
+}
+
+
+// ====================================================================
+// ====================================================================
+let audioCtx = null;
+let masterGain = null;
+let delayNode = null;
+let feedbackNode = null;
+let isMusicPlaying = false;
+let synthSequenceInterval = null;
+
+// 音頻降為 432Hz 的乘法因子 (432 / 440)
+const HZ_432_FACTOR = 432 / 440;
+
+// 原始頻率對照表 (G調五聲與和弦常用音)
+const originalNoteFreqs = {
+    'G1': 49.00,  'C2': 65.41,  'G2': 98.00,  'D2': 73.42,  'E2': 82.41,  'B2': 123.47,
+    'G3': 196.00, 'C3': 130.81, 'E3': 164.81, 'D3': 146.83, 'B3': 246.94,
+    'G4': 392.00, 'C4': 261.63, 'E4': 329.63, 'D4': 293.66, 'G5': 783.99, 'B5': 987.77
+};
+
+// 溫暖神聖的和弦循環 (G -> Cmaj7 -> Em -> Dsus4)
+const soakingChords = [
+    { name: "G",    bass: 'G1', pad: ['G2', 'D3', 'B3', 'G4'] },
+    { name: "C",    bass: 'C2', pad: ['G2', 'E3', 'C4', 'E4'] },
+    { name: "Em",   bass: 'E2', pad: ['G2', 'E3', 'B3', 'E4'] },
+    { name: "Dsus", bass: 'D2', pad: ['A2', 'D3', 'G3', 'D4'] }
+];
+
+// 調整音域池，使其在溫馨中低音區流動，絕不突兀
+const pianoNotes = ['G3', 'B3', 'C4', 'D4', 'E4', 'G4'];
+
+// 雨聲節點變數
+let rainSource = null;
+
+function initAudio() {
+    if (audioCtx) return;
+
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // 總主控音量 (Master Gain)
+    masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+
+    // 超大空間教堂延遲（浸泡殘響）
+    delayNode = audioCtx.createDelay(3.0);
+    feedbackNode = audioCtx.createGain();
+
+    delayNode.delayTime.setValueAtTime(1.0, audioCtx.currentTime); 
+    feedbackNode.gain.setValueAtTime(0.65, audioCtx.currentTime);  
+
+    // 反饋迴路連接
+    delayNode.connect(feedbackNode);
+    feedbackNode.connect(delayNode);
+
+    // 連接總輸出
+    masterGain.connect(audioCtx.destination);
+    delayNode.connect(masterGain);
+
+    // 啟動微雨生成引擎
+    createRainGenerator();
+}
+
+// 🌧️ Chapel Rain Generator (即時運算天然粉紅噪聲雨聲 - 融入大教堂空間感)
+function createRainGenerator() {
+    if (!audioCtx) return;
+
+    const bufferSize = audioCtx.sampleRate * 2; 
+    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    
+    // 生成粉紅噪聲 (Pink Noise)
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        output[i] *= 0.11; 
+        b6 = white * 0.115926;
+    }
+
+    rainSource = audioCtx.createBufferSource();
+    rainSource.buffer = noiseBuffer;
+    rainSource.loop = true;
+
+    // 濾波處理：降低至 280Hz，讓雨聲成為極低沈溫柔、完全不噪耳的深色背景
+    let rainFilter = audioCtx.createBiquadFilter();
+    rainFilter.type = 'lowpass';
+    rainFilter.frequency.setValueAtTime(280, audioCtx.currentTime); 
+
+    // 音量控制：微調音量使其成為最安靜的溫柔背景
+    let rainGain = audioCtx.createGain();
+    rainGain.gain.setValueAtTime(0.015, audioCtx.currentTime); 
+
+    // LFO（低頻振盪器）模擬雨聲的舒緩呼吸感
+    let rainLfo = audioCtx.createOscillator();
+    rainLfo.frequency.setValueAtTime(0.08, audioCtx.currentTime); 
+    let rainLfoGain = audioCtx.createGain();
+    rainLfoGain.gain.setValueAtTime(0.005, audioCtx.currentTime); 
+
+    // 將雨聲送進延遲，創造教堂空間感
+    let rainDelayGain = audioCtx.createGain();
+    rainDelayGain.gain.setValueAtTime(0.004, audioCtx.currentTime); 
+
+    // 節點連接
+    rainLfo.connect(rainLfoGain);
+    rainLfoGain.connect(rainGain.gain); 
+    
+    rainSource.connect(rainFilter);
+    rainFilter.connect(rainGain);
+    rainGain.connect(masterGain); 
+
+    rainFilter.connect(rainDelayGain);
+    rainDelayGain.connect(delayNode);
+
+    rainLfo.start();
+    rainSource.start();
+}
+
+// ====================================================================
+// 🎹 發聲器 1: 漸進式極柔毛氈鋼琴 (Swell Felt Piano - 432Hz)
+function playFeltPiano(noteName, startTime, velocity = 0.25) {
+    if (!audioCtx) return;
+    const baseFreq = originalNoteFreqs[noteName];
+    if (!baseFreq) return;
+
+    // 432Hz 轉換
+    const freq = baseFreq * HZ_432_FACTOR;
+
+    let osc1 = audioCtx.createOscillator();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(freq, startTime);
+
+    let osc2 = audioCtx.createOscillator();
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(freq, startTime);
+
+    let oscGain2 = audioCtx.createGain();
+    oscGain2.gain.setValueAtTime(0.05, startTime); // 大幅調低明亮波形比例
+
+    let noteGain = audioCtx.createGain();
+    noteGain.gain.setValueAtTime(0, startTime);
+    
+    // 🌟 Attack 延長至 0.65s，抹去任何硬度
+    noteGain.gain.linearRampToValueAtTime(velocity * 0.08, startTime + 0.65);
+    noteGain.gain.exponentialRampToValueAtTime(velocity * 0.015, startTime + 2.5);
+    noteGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 6.5);
+
+    // 🌟 極緻暖化低通：壓至 260Hz，聲音圓潤
+    let pianoFilter = audioCtx.createBiquadFilter();
+    pianoFilter.type = 'lowpass';
+    pianoFilter.frequency.setValueAtTime(260, startTime); 
+
+    osc1.connect(noteGain);
+    osc2.connect(oscGain2);
+    oscGain2.connect(noteGain);
+
+    noteGain.connect(pianoFilter);
+    pianoFilter.connect(masterGain); 
+    pianoFilter.connect(delayNode);
+
+    osc1.start(startTime);
+    osc2.start(startTime);
+    osc1.stop(startTime + 7.0);
+    osc2.stop(startTime + 7.0);
+}
+
+// ☁️ 發聲器 2: Soaking Ambient Pad（背景雲霧和弦襯底 - 432Hz）
+function triggerPadChord(chord, startTime, duration = 10.0) {
+    if (!audioCtx) return;
+
+    const notesToPlay = [chord.bass, ...chord.pad];
+
+    notesToPlay.forEach((noteName, idx) => {
+        const baseFreq = originalNoteFreqs[noteName];
+        if (!baseFreq) return;
+
+        const freq = baseFreq * HZ_432_FACTOR;
+
+        let osc = audioCtx.createOscillator();
+        osc.type = 'sawtooth'; 
+        const detuneValue = (idx % 2 === 0) ? 1.8 : -1.8; 
+        osc.frequency.setValueAtTime(freq, startTime);
+        osc.detune.setValueAtTime(detuneValue, startTime);
+
+        let padGain = audioCtx.createGain();
+        padGain.gain.setValueAtTime(0, startTime);
+        
+        // 5.5秒徐徐淡入，大氣自然
+        padGain.gain.linearRampToValueAtTime(0.025, startTime + 5.5);
+        padGain.gain.setValueAtTime(0.025, startTime + duration - 5.0);
+        padGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+        // 🌟 背景 Pad 壓至 160Hz：徹底隱入背景，只提供溫慢共鳴
+        let padFilter = audioCtx.createBiquadFilter();
+        padFilter.type = 'lowpass';
+        padFilter.frequency.setValueAtTime(160, startTime); 
+
+        osc.connect(padGain);
+        padGain.connect(padFilter);
+        padFilter.connect(masterGain);
+        padFilter.connect(delayNode);
+
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+    });
+}
+
+// ==========================================
+// 🎼 浸泡和弦與旋律排程循環 (每 10 秒一小節，拉長呼吸)
+// ==========================================
+let currentChordIdx = 0;
+let nextScheduledTime = 0.0;
+
+function audioScheduler() {
+    while (nextScheduledTime < audioCtx.currentTime + 0.5) {
+        const chord = soakingChords[currentChordIdx];
+        
+        // 1. 觸發 10.5 秒大片流動的 Pad 襯底
+        triggerPadChord(chord, nextScheduledTime, 10.5);
+
+        // 2. 極低密度鋼琴
+        if (Math.random() > 0.45) { // 降低發聲機率
+            const note = chord.pad[Math.floor(Math.random() * chord.pad.length)];
+            playFeltPiano(note, nextScheduledTime + 0.5, 0.2);
+        }
+        if (Math.random() > 0.75) {
+            const melNote = pianoNotes[Math.floor(Math.random() * pianoNotes.length)];
+            playFeltPiano(melNote, nextScheduledTime + 4.5, 0.15);
+        }
+
+        nextScheduledTime += 10.0; 
+        currentChordIdx = (currentChordIdx + 1) % soakingChords.length;
+    }
+}
+
+function startSoakingAudioLoop() {
+    initAudio();
+    
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    // 總音量在 2.0 秒內極致絲滑淡入
+    masterGain.gain.linearRampToValueAtTime(1.0, audioCtx.currentTime + 2.0);
+
+    nextScheduledTime = audioCtx.currentTime;
+    synthSequenceInterval = setInterval(audioScheduler, 150);
+}
+
+// ===== ✅ 完美暫停機制 =====
+function stopSoakingAudioLoop() {
+    if (synthSequenceInterval) {
+        clearInterval(synthSequenceInterval);
+        synthSequenceInterval = null;
+    }
+
+    if (masterGain && audioCtx) {
+        // 1.2 秒緩慢釋放淡出
+        masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.2);
+        
+        setTimeout(() => {
+            if (audioCtx && !isMusicPlaying) {
+                audioCtx.suspend();
+            }
+        }, 1300);
+    }
+}
+
+// ===== ✅ 音樂按鈕開關 =====
+function toggleMusic() {
+    const btn = document.getElementById("musicBtn");
+    const text = document.getElementById("musicText");
+
+    if (!isMusicPlaying) {
+        isMusicPlaying = true;
+        btn.classList.add("playing");
+        text.innerText = "靜謐琴聲播放中";
+        startSoakingAudioLoop();
+    } else {
+        isMusicPlaying = false;
+        btn.classList.remove("playing");
+        text.innerText = "啟動靜謐琴聲";
+        stopSoakingAudioLoop();
+    }
+}
+
+// ==========================================
+// ⏳ 10秒無操作自動隱藏與展開控制面板機制
+// ==========================================
+let idleTimer = null;
+let isHovered = false; 
+const controlPanel = document.getElementById("controlPanel");
+
+function resetIdleTimer() {
+    controlPanel.style.opacity = "1";
+    controlPanel.style.pointerEvents = "auto";
+    document.body.style.cursor = "default";
+
+    clearTimeout(idleTimer);
+
+    if (!isHovered) {
+        idleTimer = setTimeout(hideControls, 10000); 
+    }
+}
+
+function hideControls() {
+    if (isHovered) return; 
+    controlPanel.style.opacity = "0";
+    controlPanel.style.pointerEvents = "none";
+    
+    if (isSabbathMode) {
+        document.body.style.cursor = "none";
+    }
+}
+
+// 追蹤手勢與滑鼠活動
+window.addEventListener("mousemove", resetIdleTimer);
+window.addEventListener("keydown", resetIdleTimer);
+window.addEventListener("touchstart", resetIdleTimer);
+window.addEventListener("mousedown", resetIdleTimer);
+
+controlPanel.addEventListener("mouseenter", () => {
+    isHovered = true;
+    clearTimeout(idleTimer);
+});
+
+controlPanel.addEventListener("mouseleave", () => {
+    isHovered = false;
+    resetIdleTimer();
+});
+
+
+// 啟動網頁基礎定時器
 setInterval(updateTime, 1000);
-quoteTimer = setInterval(changeQuote, 15000);
+quoteTimer = setInterval(changeQuote, 20000); // 🌟 平日名言設定為 20 秒 (20000ms)
 
 // 初始化執行
 updateTime();
 changeQuote();
+resetIdleTimer(); 
 
 </script>
 
