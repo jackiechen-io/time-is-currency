@@ -59,7 +59,7 @@
 
         /* 核心倒數數字 */
         .main-number {
-            font-size: clamp(4rem, 12vw, 7.5rem);
+            font-size: clamp(3rem, 11vw, 7.5rem);
             font-weight: 300;
             letter-spacing: -0.02em;
             line-height: 1;
@@ -121,7 +121,7 @@
         /* 英文名言：古典優雅的襯線體，適度放大提升Legibility與大器感 */
         .quote-en {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.25rem, 3.2vw, 1.65rem);
+            font-size: clamp(1rem, 3.2vw, 1.65rem);
             font-style: italic;
             line-height: 1.55;
             margin-bottom: 12px;
@@ -133,7 +133,7 @@
 
         /* 中文名言 */
         .quote-zh {
-            font-size: clamp(1rem, 2.4vw, 1.25rem);
+            font-size: clamp(0.85rem, 2.4vw, 1.25rem);
             font-weight: 300;
             line-height: 1.65;
             color: var(--text-muted);
@@ -146,7 +146,7 @@
         /* 作者標示 */
         .author {
             margin-top: 12px;
-            font-size: clamp(11px, 1.5vw, 13px);
+            font-size: clamp(10px, 1.5vw, 13px);
             letter-spacing: 0.15em;
             color: var(--text-light);
             text-transform: uppercase;
@@ -329,6 +329,38 @@
                 transform: translateX(50%);
                 width: auto; /* 🌟 避免寬度被強行拉大，保持圓鈕優美排列 */
                 justify-content: center;
+            }
+
+            /* 🌟 手機版專屬微調：縮減垂直間距，增加字間空氣感，消除擠壓感 */
+            .label {
+                margin-bottom: 8px;
+                font-size: 11px;
+            }
+            .main-number {
+                margin-bottom: 16px;
+            }
+            .divider {
+                margin: 10px 0 16px 0;
+            }
+            .money {
+                line-height: 1.6;
+            }
+            .quote-box {
+                margin-top: 35px; /* 從原本 60px 縮小，給手機畫面釋放出極大呼吸空間 */
+                padding: 0 15px;
+            }
+            .quote-en {
+                line-height: 1.6;
+                margin-bottom: 8px;
+            }
+            .quote-zh {
+                line-height: 1.7;
+                letter-spacing: 0.08em; /* 中文行間與字距拉寬，呈現日系極簡留白 */
+            }
+            
+            /* 🌟 調整 Sabbath 模式在手機上的垂直位移，避免頂部超出螢幕 */
+            .sabbath-active .quote-box {
+                transform: translateY(-80px); /* 由原本 -110px 改為更溫和的 -80px */
             }
         }
     </style>
